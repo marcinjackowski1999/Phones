@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SetupPhoneViewController" customModule="Phones" customModuleProvider="target">
+            <connections>
+                <outlet property="phoneNameTextField" destination="uXf-i1-YLV" id="mGF-Hl-4rz"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uXf-i1-YLV">
+                    <rect key="frame" x="8" y="285" width="584" height="30"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u2R-jR-SlG">
+                    <rect key="frame" x="272" y="343" width="57" height="30"/>
+                    <state key="normal" title="Register"/>
+                    <connections>
+                        <action selector="registerPhoneButtonAction:" destination="-1" eventType="touchUpInside" id="6Rw-GH-qqa"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="uXf-i1-YLV" secondAttribute="trailing" constant="8" id="F9i-lP-GfK"/>
+                <constraint firstItem="uXf-i1-YLV" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Mud-6X-tSh"/>
+                <constraint firstItem="uXf-i1-YLV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="YHa-xp-gC9"/>
+                <constraint firstItem="u2R-jR-SlG" firstAttribute="top" secondItem="uXf-i1-YLV" secondAttribute="bottom" constant="28" id="fYh-CI-p9t"/>
+                <constraint firstItem="u2R-jR-SlG" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="hP7-zc-L1D"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

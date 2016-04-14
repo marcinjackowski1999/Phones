@@ -49,9 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        
-        sendLocalNotificationWithMessage("kupa2")
-        
+                
         LocationManager.sharedInstance.setup()
         LocationManager.sharedInstance.startMonitoringBeacons()
         

@@ -25,6 +25,7 @@
 		D67521571C1ACE170060D464 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D67521561C1ACE170060D464 /* Assets.xcassets */; };
 		D675215A1C1ACE170060D464 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D67521581C1ACE170060D464 /* LaunchScreen.storyboard */; };
 		D6B3D70F1C5177390050ED7A /* Beacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3D70E1C5177390050ED7A /* Beacon.swift */; };
+		D6CA3BDD1CC01A0E0006BF60 /* PushServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CA3BDC1CC01A0E0006BF60 /* PushServiceManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		D67521591C1ACE170060D464 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D675215B1C1ACE170060D464 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6B3D70E1C5177390050ED7A /* Beacon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Beacon.swift; sourceTree = "<group>"; };
+		D6CA3BDC1CC01A0E0006BF60 /* PushServiceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushServiceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +138,7 @@
 		D64647D91C1AD07400CE2EC8 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				D6CA3BDB1CC019FA0006BF60 /* PushNotifications */,
 				D63CFEC51C5BFE28005176F8 /* Beacon */,
 				D63CFEC41C5BFE1F005176F8 /* SendLocation */,
 				D63CFEC31C5BFE18005176F8 /* RegisterPhone */,
@@ -194,6 +197,14 @@
 				D675215B1C1ACE170060D464 /* Info.plist */,
 			);
 			path = Phones;
+			sourceTree = "<group>";
+		};
+		D6CA3BDB1CC019FA0006BF60 /* PushNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				D6CA3BDC1CC01A0E0006BF60 /* PushServiceManager.swift */,
+			);
+			name = PushNotifications;
 			sourceTree = "<group>";
 		};
 		F1D09AE2811D14B28A9DD9BE /* Pods */ = {
@@ -333,6 +344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6CA3BDD1CC01A0E0006BF60 /* PushServiceManager.swift in Sources */,
 				D64647EA1C1AD6B800CE2EC8 /* ViewController.swift in Sources */,
 				D64647DB1C1AD08300CE2EC8 /* Router.swift in Sources */,
 				D64647DE1C1AD16B00CE2EC8 /* RegisterPhoneService.swift in Sources */,

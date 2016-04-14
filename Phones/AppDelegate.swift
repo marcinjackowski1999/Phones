@@ -29,10 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
 
             LocationManager.sharedInstance.setup()
-            
-            let settings = UIUserNotificationSettings(forTypes: [.Sound, .Alert, .Badge], categories: nil)
-            UIApplication.sharedApplication().registerUserNotificationSettings(settings)
-            UIApplication.sharedApplication().registerForRemoteNotifications()
+            PushServiceManager.sharedInstance.registerForNotifications()
 
             window.rootViewController = viewController
             window.makeKeyAndVisible()
@@ -43,19 +40,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        
-        let token = deviceToken.description.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "<>")).stringByReplacingOccurrencesOfString(" ", withString: "")
-        
-        print(token)
-        
-        NSUserDefaults.standardUserDefaults().setValue(deviceToken, forKey: "kDeviceToken")
-        NSUserDefaults.standardUserDefaults().synchronize()
+        PushServiceManager.sharedInstance.saveDeviceToken(deviceToken)
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        
-        sendLocalNotificationWithMessage("kupa1")
-        
         LocationManager.sharedInstance.setup()
         LocationManager.sharedInstance.startMonitoringBeacons()
     }

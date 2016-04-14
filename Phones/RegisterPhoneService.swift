@@ -18,15 +18,10 @@ class RegisterPhoneService {
 
         var dictionaryRepresentation: [String: AnyObject]? {
             var dict: [String: AnyObject] = [:]
-            var token = ""
-            
-            if let deviceToken = (NSUserDefaults.standardUserDefaults().valueForKey("kDeviceToken") as? NSData)?.description {
-                token = deviceToken
-            }
-            
+
             dict["name"] = name
             dict["phoneId"] = phoneId
-            dict["deviceToken"] = token
+            dict["deviceToken"] = PushServiceManager.sharedInstance.getDeviceToken()
             dict["currentBeacon"] = ["majorValue": 0, "minorValue": 0]
             dict["lastBeacon"] = ["majorValue": 0, "minorValue": 0]
 

@@ -12,18 +12,28 @@ import CoreLocation
 
 class LocationManager: NSObject {
     
-    class var sharedInstance: LocationManager {
-        struct Static {
-            static let instance = LocationManager()
-        }
-        return Static.instance
-    }
+    static let sharedInstance = LocationManager()
+    private override init() {}
     
     weak var viewController: MainViewController?
     var localBeacons = [Beacon]()
     var locationManager = CLLocationManager()
     var lastMinBeacon: Beacon?
 
+    func setup() {
+        locationManager.requestAlwaysAuthorization()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = kCLDistanceFilterNone
+        
+        locationManager.pausesLocationUpdatesAutomatically = false
+        locationManager.allowsBackgroundLocationUpdates = true
+        
+        loadBeacons()
+        startMonitoringBeacons()
+    }
+    
+    
     func getBeacons() {
         stopMonitoringAllBeacons()
         
@@ -95,19 +105,6 @@ class LocationManager: NSObject {
         locationManager.stopRangingBeaconsInRegion(beaconRegion)
         locationManager.stopUpdatingLocation()
     }
-    
-    func setup() {
-        locationManager.requestAlwaysAuthorization()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        locationManager.distanceFilter = kCLDistanceFilterNone;
-        
-        locationManager.pausesLocationUpdatesAutomatically = false
-        locationManager.allowsBackgroundLocationUpdates = true
-        
-        loadBeacons()
-        startMonitoringBeacons()
-    }
 }
 
 extension LocationManager: CLLocationManagerDelegate {
@@ -129,7 +126,6 @@ extension LocationManager: CLLocationManagerDelegate {
             if let lastMinBeacon = lastMinBeacon {
                 for beacon in beacons {
                     
-                    // sprawdzenie czy jesesmy w backgroundzie
                     loadBeacons()
                     
                     for localBeacon in localBeacons {
@@ -171,35 +167,28 @@ extension LocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
+        LocationManager.sharedInstance.setup()
+        manager.stopUpdatingLocation()
     }
-    
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        
-    }
-    
+
     func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        sendLocalNotificationWithMessage("enter")
+        LocationManager.sharedInstance.setup()
     }
     
     func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
-        sendLocalNotificationWithMessage("exit")
+        LocationManager.sharedInstance.setup()
     }
-    
-    func locationManager(manager: CLLocationManager, didUpdateToLocation newLocation: CLLocation, fromLocation oldLocation: CLLocation) {
-        
-    }
-    
-    func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {
-        
-        sendLocalNotificationWithMessage("state")
 
-        
-         if (state == .Inside) {
-            manager.startMonitoringForRegion(region)
-         } else {
-            manager.stopMonitoringForRegion(region)
-        }
+    func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {
+//         if (state == .Inside) {
+//            sendLocalNotificationWithMessage("Inside")
+//            LocationManager.sharedInstance.setup()
+//            manager.startMonitoringForRegion(region)
+//         } else {
+//            sendLocalNotificationWithMessage("Outside")
+//            LocationManager.sharedInstance.setup()
+//            manager.startMonitoringForRegion(region)
+//        }
     }
     
     func sendLocation() {

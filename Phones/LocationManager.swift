@@ -173,10 +173,14 @@ extension LocationManager: CLLocationManagerDelegate {
 
     func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
         LocationManager.sharedInstance.setup()
+        manager.stopUpdatingLocation()
+        manager.stopMonitoringForRegion(region)
     }
     
     func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
         LocationManager.sharedInstance.setup()
+        manager.stopUpdatingLocation()
+        manager.stopMonitoringForRegion(region)
     }
 
     func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {

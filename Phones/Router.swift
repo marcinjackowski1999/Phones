@@ -15,7 +15,7 @@ enum Result<T> {
 }
 
 enum Router: URLRequestConvertible {
-    static let baseURLString = "http://192.168.1.19:3000/"
+    static let baseURLString = "http://10.24.4.178:3000/"
     
     var method: Alamofire.Method {
         switch self {

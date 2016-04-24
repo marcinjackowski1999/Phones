@@ -18,7 +18,6 @@ class LocationManager: NSObject {
     weak var viewController: MainViewController?
     var localBeacons = [Beacon]()
     var locationManager = CLLocationManager()
-    var lastMinBeacon: Beacon?
 
     func setup() {
         locationManager.requestAlwaysAuthorization()
@@ -116,53 +115,34 @@ extension LocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion) {
-        
-        if let beaconData = NSUserDefaults.standardUserDefaults().valueForKey("lastSeenBeacon") as? NSData {
-            lastMinBeacon = NSKeyedUnarchiver.unarchiveObjectWithData(beaconData) as? Beacon
-        }
-        
-        if(beacons.count > 0) {
+        if !beacons.isEmpty {
+            loadBeacons()
+            var closestBeacon: Beacon?
             
-            if let lastMinBeacon = lastMinBeacon {
-                for beacon in beacons {
-                    
-                    loadBeacons()
-                    
+            beacons.enumerate().forEach({
+                
+                func findBeacon(beacon: CLBeacon) -> Beacon? {
                     for localBeacon in localBeacons {
-                        
                         if localBeacon == beacon {
-                            
-                            localBeacon.lastSeenBeacon = beacon
-                            if lastMinBeacon != localBeacon {
-                                switch beacon.proximity {
-                                case .Near, .Far, .Immediate:
-                                    if localBeacon.lastSeenBeacon?.accuracy > 0 {
-                                        if lastMinBeacon.lastSeenBeacon?.accuracy > localBeacon.lastSeenBeacon?.accuracy {
-                                            self.lastMinBeacon = localBeacon
-                                            self.lastMinBeacon?.lastSeenBeacon = beacon
-                                        }
-                                    }
-                                case .Unknown:
-                                    ()
-                                }
-                            } else {
-                                self.lastMinBeacon = localBeacon
-                            }
+                            return localBeacon
                         }
                     }
+                    return nil
                 }
                 
-                let itemData = NSKeyedArchiver.archivedDataWithRootObject(self.lastMinBeacon!)
-                NSUserDefaults.standardUserDefaults().setObject(itemData, forKey: "lastSeenBeacon")
-                sendLocation()
-            } else {
-                if let i = localBeacons.indexOf({$0 == beacons[0]}) {
-                    if beacons[0].accuracy > 0 {
-                        lastMinBeacon = localBeacons[i]
-                        lastMinBeacon?.lastSeenBeacon = beacons[0]
+                if $0 == 0 {
+                    let localBeacon = findBeacon($1)
+                    localBeacon?.lastSeenBeacon = $1
+                    closestBeacon = localBeacon
+                } else {
+                    if closestBeacon?.lastSeenBeacon?.accuracy > $1.accuracy {
+                        closestBeacon = findBeacon($1)
+                        closestBeacon?.lastSeenBeacon = $1
                     }
                 }
-            }
+            })
+            
+            sendLocation(closestBeacon)
         }
     }
     
@@ -183,24 +163,12 @@ extension LocationManager: CLLocationManagerDelegate {
         manager.stopMonitoringForRegion(region)
     }
 
-    func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {
-//         if (state == .Inside) {
-//            sendLocalNotificationWithMessage("Inside")
-//            LocationManager.sharedInstance.setup()
-//            manager.startMonitoringForRegion(region)
-//         } else {
-//            sendLocalNotificationWithMessage("Outside")
-//            LocationManager.sharedInstance.setup()
-//            manager.startMonitoringForRegion(region)
-//        }
-    }
+    func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {}
     
-    func sendLocation() {
+    func sendLocation(beacon: Beacon?) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
 
-        guard let databaseId = userDefaults.valueForKey("databaseId") as? String, beacon = NSKeyedUnarchiver.unarchiveObjectWithData(userDefaults.valueForKey("lastSeenBeacon") as! NSData) as? Beacon else {
-            return
-        }
+        guard let databaseId = userDefaults.valueForKey("databaseId") as? String, beacon = beacon else { return }
         
         let parameters = SendLocationService.Parameters(majorValue: Int(beacon.majorValue), minorValue: Int(beacon.minorValue))
         SendLocationService().sendLocation(databaseId, parameters: parameters) { (result) -> Void in
